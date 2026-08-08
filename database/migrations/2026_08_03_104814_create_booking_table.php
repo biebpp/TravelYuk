@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
+            
+            // Tiga Foreign Key utama (Otomatis dibuatkan indeks oleh Laravel)
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('transaction_id'); 
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
+            $table->foreignId('bundle_id')->constrained('tour_bundles')->onDelete('cascade');
+            
+            $table->string('name');
+            $table->date('date')->index(); 
+            $table->string('status')->index(); 
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void {
+        Schema::dropIfExists('bookings');
+    }
+};
