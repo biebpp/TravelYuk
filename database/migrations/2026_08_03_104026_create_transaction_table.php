@@ -10,15 +10,13 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->string('id')->primary(); 
-            
-            // Membuat kolom user_id sekaligus indeks foreign key
+            $table->string('id')->primary();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            
+
             $table->string('payment');
             $table->double('nominal');
-            $table->dateTime('transaction_date')->index(); 
-            $table->string('status')->index(); 
+            $table->dateTime('transaction_date')->index();
+            $table->string('status')->index();
             $table->timestamps();
         });
     }

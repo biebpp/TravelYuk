@@ -9,5 +9,7 @@
     <h1 class="bg-black/75 text-white text-2xl p-4 rounded-xl">
       TravelYuk
     </h1>
+    <a href="/register">register</a>
+    <a href="/login">login</a>
   </body>
 </html>
