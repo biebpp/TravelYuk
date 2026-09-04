@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Client\BookingController as ClientBookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -26,22 +27,23 @@ Route::middleware(['auth'])->get('/booking', function () {
         : redirect()->route('client.booking');
 })->name('booking');
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('admin.users.dashboard');
     Route::post('/dashboard', [UserController::class, 'store'])->name('admin.users.store');
     Route::patch('/dashboard/{id}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/dashboard/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     
-    Route::get('/booking', [BookingController::class, 'index'])->name('admin.booking');
+    Route::get('/booking', [AdminBookingController::class, 'index'])->name('admin.booking');
+    Route::patch('/booking/{booking}', [AdminBookingController::class, 'updateStatus'])->name('admin.booking.status');
 });
 
+Route::middleware(['role:client'])->prefix('client')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('client.dashboard');
+    })->name('client.dashboard');
 
-Route::get('/client/dashboard', function () {
-    return view('client.dashboard');
-})->middleware('role:client')->name('client.dashboard');
-
-Route::get('/client/booking', function () {
-    return view('client.booking');
-})->middleware('role:client')->name('client.booking');
+    Route::get('/booking', [ClientBookingController::class, 'index'])->name('client.booking');
+    Route::post('/booking', [ClientBookingController::class, 'store'])->name('client.booking.store');
+});
 
 require __DIR__.'/auth.php';

@@ -9,13 +9,12 @@ return new class extends Migration {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('transaction_id');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->string('transaction_id')->nullable();
             $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
-            $table->foreignId('bundle_id')->constrained('tour_bundles')->onDelete('cascade');
+            $table->foreignId('bundle_id')->nullable()->constrained('tour_bundles')->onDelete('cascade');
 
             $table->string('name');
-            $table->date('date')->index();
             $table->string('status')->index();
             $table->timestamps();
         });
