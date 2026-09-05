@@ -20,17 +20,20 @@
     <!-- Nav Links -->
     <nav class="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-1">
         @if (auth()->user()->role === 'admin')
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="rounded-md">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('admin.users.dashboard')" class="rounded-md">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('booking')" :active="request()->routeIs('booking')" class="rounded-md">
+            <x-responsive-nav-link :href="route('booking')" :active="request()->routeIs('admin.booking')" class="rounded-md">
                 {{ __('Booking') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.destinations')" :active="request()->routeIs('admin.destinations')" class="rounded-md">
+                {{ __('Destination') }}
+            </x-responsive-nav-link>
         @else
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="rounded-md">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('client.dashboard')" class="rounded-md">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('booking')" :active="request()->routeIs('booking')" class="rounded-md">
+            <x-responsive-nav-link :href="route('booking')" :active="request()->routeIs('client.booking')" class="rounded-md">
                 {{ __('Booking') }}
             </x-responsive-nav-link>
         @endif

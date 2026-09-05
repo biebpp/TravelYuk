@@ -16,7 +16,7 @@
                             <p class="font-semibold text-gray-600">{{ $booking->status }}</p>
                         </div>
                         <div>
-                            <form method="POST" action="{{ route('admin.booking.status', $booking->id) }}">
+                            <form method="POST" action="{{ route('admin.booking.status', $booking->id) }}" class="flex gap-2 md:flex-row flex-col">
                                 @csrf
                                 @method('PATCH')
                                 <x-edit-button type="submit" name="status" value="accepted">

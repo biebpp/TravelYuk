@@ -1,15 +1,32 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @vite('resources/css/app.css')
-  </head>
-  <body class="bg-gray-150 p-2">
-    <h1 class="bg-black/75 text-white text-2xl p-4 rounded-xl">
-      TravelYuk
-    </h1>
-    <a href="/register">register</a>
-    <a href="/login">login</a>
+
+<x-head>
+  <body class="bg-gray-150 text-black">
+    <div class="text-xl w-screen flex items-center">
+      <img src="{{ asset('images/BLogo_nocut.svg') }}" alt="Logo" class="h-12 w-auto">
+      <div class="w-full flex gap-4 justify-center">
+        <a>Home</a>
+        <a>Packages</a>
+        <a>Tours</a>
+        <a>Contact</a>
+      </div>
+      <div class="flex justify-end">
+        @auth
+          <a href="{{ route('dashboard') }}" class="">
+            Dashboard
+          </a>
+        @else
+          <a href="{{ route('login') }}" class="">
+            Log in
+          </a>
+          <a href="{{ route('register') }}" class="">
+            Register
+          </a>
+        @endauth
+      </div>
+    </div>
   </body>
+</x-head>
+
 </html>

@@ -71,8 +71,8 @@
         </div>
     </x-app-layout>
 
-    @include('admin.partials.create-modal')
-    @include('admin.partials.edit-modal')
-    @include('admin.partials.view-modal')
-    @include('admin.partials.delete-modal')
+    @include('admin.user.partials.create-modal')
+    @include('admin.user.partials.edit-modal')
+    @include('admin.user.partials.view-modal')
+    @include('admin.user.partials.delete-modal')
 </div>

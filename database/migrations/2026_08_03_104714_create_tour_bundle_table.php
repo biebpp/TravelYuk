@@ -10,13 +10,13 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
-            $table->foreignId('transportation_id')->constrained('transportations')->onDelete('cascade');
+            $table->foreignId('transportation_id')->nullable()->constrained('transportations')->onDelete('cascade');
 
-            $table->string('bundle_name');
+            $table->string('name');
             $table->text('description');
             $table->double('price');
-            $table->integer('slot');
-            $table->double('rating');
+            $table->integer('slot')->nullable();
+            $table->double('rating')->nullable();
             $table->timestamps();
         });
     }

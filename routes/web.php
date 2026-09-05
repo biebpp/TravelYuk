@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Client\BookingController as ClientBookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
@@ -35,6 +36,11 @@ Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     
     Route::get('/booking', [AdminBookingController::class, 'index'])->name('admin.booking');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'updateStatus'])->name('admin.booking.status');
+    
+    Route::get('/destination', [DestinationController::class, 'index'])->name('admin.destinations');
+    Route::post('/destination', [DestinationController::class, 'store'])->name('admin.destinations.store');
+    Route::patch('/destination/{id}', [DestinationController::class, 'update'])->name('admin.destinations.update');
+    Route::delete('/destination/{id}', [DestinationController::class, 'destroy'])->name('admin.destinations.destroy');
 });
 
 Route::middleware(['role:client'])->prefix('client')->group(function () {

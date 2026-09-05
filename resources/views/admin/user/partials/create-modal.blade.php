@@ -9,7 +9,8 @@
         <div class="mt-4 space-y-4">
             <div>
                 <x-input-label for="create_name" :value="__('Name')" />
-                <x-text-input id="create_name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required />
+                <x-text-input id="create_name" name="name" type="text" class="mt-1 block w-full" :value="old('name')"
+                    required />
                 <div class="validation-error-container">
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
@@ -17,7 +18,8 @@
 
             <div>
                 <x-input-label for="create_email" :value="__('Email')" />
-                <x-text-input id="create_email" name="email" type="email" class="mt-1 block w-full" :value="old('email')" required />
+                <x-text-input id="create_email" name="email" type="email" class="mt-1 block w-full"
+                    :value="old('email')" required />
                 <div class="validation-error-container">
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
@@ -38,7 +40,8 @@
 
             <div>
                 <x-input-label for="create_password" :value="__('Password')" />
-                <x-text-input id="create_password" name="password" type="password" class="mt-1 block w-full" required placeholder="••••••••" />
+                <x-text-input id="create_password" name="password" type="password" class="mt-1 block w-full" required
+                    placeholder="••••••••" />
                 <div class="validation-error-container">
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
@@ -46,7 +49,8 @@
         </div>
 
         <div class="mt-6 flex justify-end gap-3">
-            <button type="button" x-on:click="$dispatch('close')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md">
+            <button type="button" x-on:click="$dispatch('close')"
+                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md">
                 {{ __('Cancel') }}
             </button>
 
