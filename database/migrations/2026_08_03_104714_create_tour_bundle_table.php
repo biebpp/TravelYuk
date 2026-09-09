@@ -9,7 +9,7 @@ return new class extends Migration {
         Schema::create('tour_bundles', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
+            $table->foreignId('admin_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('transportation_id')->nullable()->constrained('transportations')->onDelete('cascade');
 
             $table->string('name');

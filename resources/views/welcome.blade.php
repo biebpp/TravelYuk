@@ -10,38 +10,16 @@
 
     <div class="text-white">
       <div class="bg-black absolute w-full h-screen -z-40">
-        <img class="w-full h-full object-fill opacity-85" src="{{ asset('images/1.png') }}" alt="Background Image">
+        <img class="w-full h-full object-fill opacity-75" src="{{ asset('images/1.png') }}" alt="Background Image">
       </div>
 
-      <div id="hero" class="flex flex-col h-screen">
-        <div class="p-8 pr-12 text-xl w-full flex items-center">
-          <img src="{{ asset('images/WLogo_nocut.svg') }}" alt="Logo" class="h-12 w-auto">
-          <div class="w-full flex gap-4 justify-center">
-            <a>Home</a>
-            <a>Packages</a>
-            <a>Tours</a>
-            <a>Contact</a>
-          </div>
-          <div class="flex justify-end">
-            @auth
-              <a href="{{ route('dashboard') }}" class="">
-                Dashboard
-              </a>
-            @else
-              <a href="{{ route('login') }}" class="">
-                Log in
-              </a>
-              <a href="{{ route('register') }}" class="">
-                Register
-              </a>
-            @endauth
-          </div>
-        </div>
+      <div class="flex flex-col h-screen">
+        <x-navbar></x-navbar>
 
-        <div class="flex flex-col h-full justify-evenly">
+        <div id="hero" class="flex flex-col h-full justify-evenly">
           <div class="flex flex-col">
             <div class="flex flex-col justify-center items-center">
-              <div class="text-6xl">
+              <div class="ephesis-regular text-8xl">
                 The World is Waiting for You
               </div>
               <div class="text-4xl">
@@ -52,15 +30,15 @@
 
           <div class="flex-col">
             <div class="flex justify-center items-center">
-              <div class="flex p-2 px-12 bg-blue-500 w-fit text-2xl gap-8">
-                <a class="hover:underline">Flights</a>
-                <a class="hover:underline">Bundles</a>
-                <a class="hover:underline">Tours</a>
+              <div class="flex p-2 px-12 bg-blue-500 w-fit text-2xl gap-8 rounded-t-md">
+                <a class="hover:underline cursor-pointer">Flights</a>
+                <a class="hover:underline cursor-pointer">Bundles</a>
+                <a class="hover:underline cursor-pointer">Tours</a>
               </div>
             </div>
 
             <div class="flex justify-center items-center text-black">
-              <div class="flex p-4 px-4 bg-white w-fit text-2xl gap-8">
+              <div class="flex p-4 px-4 bg-white/80 w-fit text-2xl gap-8">
                 <div class="w-32 flex justify-between">
                   <a class="hover:text-black/80 hover:cursor-pointer">From</a>
                   <img src="{{ asset('assets/chevron-down.svg') }}" />
@@ -93,7 +71,7 @@
 
       <div class="h-screen flex justify-center items-center text-black">
         <div class="flex flex-col justify-center items-center">
-          <div class="text-7xl mb-8">Popular Destination</div>
+          <div class="ephesis-regular text-8xl mb-8">Popular Destination</div>
           <div class="flex flex-row gap-8">
 
             <div class="bg-white pb-2 w-min">

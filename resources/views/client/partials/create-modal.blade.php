@@ -9,15 +9,32 @@
         <div class="mt-4 space-y-4">
             <div>
                 <x-input-label for="create_name" :value="__('Name')" />
-                <x-text-input id="create_name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required />
+                <x-text-input id="create_name" name="name" type="text" class="mt-1 block w-full" :value="old('name')"
+                    required />
                 <div class="validation-error-container">
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
             </div>
         </div>
 
+        <div>
+            <x-input-label for="create_bundle" :value="__('Bundle')" />
+            <select id="create_bundle" name="bundle_id"
+                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                required>
+                <option value="" disabled selected>{{ __('Select a Bundle') }}</option>
+                @foreach($bundles as $bundle)
+                    <option value="{{ $bundle->id }}">{{ $bundle->name }}</option>
+                @endforeach
+            </select>
+            <div class="validation-error-container">
+                <x-input-error :messages="$errors->get('bundle_id')" class="mt-2" />
+            </div>
+        </div>
+
         <div class="mt-6 flex justify-end gap-3">
-            <button type="button" x-on:click="$dispatch('close')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md">
+            <button type="button" x-on:click="$dispatch('close')"
+                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md">
                 {{ __('Cancel') }}
             </button>
 

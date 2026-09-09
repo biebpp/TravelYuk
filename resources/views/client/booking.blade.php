@@ -1,12 +1,20 @@
 <div x-data="{ 
-    selectedUser: { id: null, name: '', status: 'pending' },
+    selectedUser: { id: null, name: '', bundle_id: '', status: 'pending' },
     clearErrors() {
         document.querySelectorAll('.validation-error-container').forEach(el => el.innerHTML = '');
     },
+    openPaymentModal(id, name) {
+        this.selectedUser = { id, name };
+        $dispatch('open-modal', 'payment-modal');
+    },
     openCreateModal() {
         this.clearErrors();
-        this.selectedUser = { id: null, name: '', status: 'pending' };
+        this.selectedUser = { id: null, name: '', bundle_id: '', status: 'pending' };
         $dispatch('open-modal', 'create-modal');
+    },
+    openDeleteModal(id, name) {
+        this.selectedUser = { id, name };
+        $dispatch('open-modal', 'delete-modal');
     }
 }">
     <x-app-layout>
@@ -23,20 +31,47 @@
             </div>
         </x-slot>
 
-        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                @forelse ($bookings as $booking)
-                    <x-row-card>
-                        <div class="w-full">
-                            <p class="font-semibold">{{ $booking->name }}</p>
-                            <p class="text-sm text-gray-600">{{ $booking->status }}</p>
+        <x-table-container>
+            @forelse ($bookings as $booking)
+                <x-row-card>
+                    <div class="w-full">
+                        <div>
+                            <div class="flex flex-col">
+                                <p class="text-xl font-semibold">{{ $booking->name }}</p>
+                                <div class="flex flex-row">
+                                    <div class="flex flex-col w-full text-gray-600 text-sm mb-2">
+                                        @if ($booking->bundle)
+                                            <span>
+                                                Paket yang Dipilih : {{ $booking->bundle->name }}
+                                            </span>
+                                        @endif
+                                        <span>
+                                            Status : {{ $booking->status }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-end gap-1">
+                                        @if ($booking->status == "payment")
+                                            <x-edit-button class="h-fit" x-on:click="openPaymentModal({{ $booking->id }}, '{{ addslashes($booking->name) }}')">
+                                                {{ __('Pay') }}
+                                            </x-edit-button>
+                                        @endif
+                                        <x-delete-button class="h-fit"
+                                            x-on:click="openDeleteModal({{ $booking->id }}, '{{ addslashes($booking->name) }}')">
+                                            Cancel
+                                        </x-delete-button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </x-row-card>
-                @empty
-                    <p>There is no Booking.</p>
-                @endforelse
-            </div>
-        </div>
+                    </div>
+                </x-row-card>
+            @empty
+                <p>There is no Booking.</p>
+            @endforelse
+        </x-table-container>
     </x-app-layout>
-    @include('client.partials.create-modal');
+    
+    @include('client.partials.create-modal')
+    @include('client.partials.delete-modal')
+    @include('client.partials.payment-modal')
 </div>

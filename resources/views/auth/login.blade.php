@@ -1,4 +1,4 @@
-<x-layout.middle>
+<x-layout.middle class="bg-black">
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

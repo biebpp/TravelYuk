@@ -3,6 +3,10 @@
     clearErrors() {
         document.querySelectorAll('.validation-error-container').forEach(el => el.innerHTML = '');
     },
+    openViewModal(id, name, address, description) {
+        this.selectedUser = { id, name, address, description };
+        $dispatch('open-modal', 'view-modal');
+    },
     openEditModal(destination) {
         this.clearErrors();
         this.selectedUser = { ...destination };
@@ -32,31 +36,41 @@
             </div>
         </x-slot>
 
-        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <div class="max-w-full">
-                @forelse ($destinations as $destination)
-                    <x-row-card>
-                        <div class="w-full flex flex-row items-center gap-4">
-                            {{ $destination->name }}
-                            {{ $destination->address }}
-                            {{ $destination->description }}
+        <x-table-container>
+            @forelse ($destinations as $destination)
+                <x-row-card>
+                    <div class="flex flex-row">
+                        <div class="w-full flex flex-col">
+                            <span class="text-xl font-semibold">
+                                {{ $destination->name }}
+                            </span>
+                            <span class="text-gray-600 text-sm">
+                                {{ $destination->address }}
+                            </span>
                         </div>
-                        <div>
-                            <x-edit-button x-on:click="openEditModal({ id: {{ $destination->id }}, name: '{{ addslashes($destination->name) }}', address: '{{ addslashes($destination->address) }}', description: '{{ addslashes($destination->description) }}' })">
+                        <div class="flex justify-end items-center gap-1">
+                            <x-primary-button
+                                x-on:click="openViewModal({{ $destination->id }}, '{{ addslashes($destination->name) }}', '{{ addslashes($destination->address) }}', '{{ addslashes($destination->description) }}')">
+                                View
+                            </x-primary-button>
+                            <x-edit-button class="h-fit"
+                                x-on:click="openEditModal({ id: {{ $destination->id }}, name: '{{ addslashes($destination->name) }}', address: '{{ addslashes($destination->address) }}', description: '{{ addslashes($destination->description) }}' })">
                                 Edit
                             </x-edit-button>
-                            <x-delete-button x-on:click="openDeleteModal({{ $destination->id }}, '{{ addslashes($destination->name) }}')">
+                            <x-delete-button class="h-fit"
+                                x-on:click="openDeleteModal({{ $destination->id }}, '{{ addslashes($destination->name) }}')">
                                 Delete
                             </x-delete-button>
                         </div>
-                    </x-row-card>
-                @empty
-                    <p>No destinations found.</p>
-                @endforelse
-            </div>
-        </div>
+                    </div>
+                </x-row-card>
+            @empty
+                <p>No destinations found.</p>
+            @endforelse
+        </x-table-container>
     </x-app-layout>
-    @include('admin.destination.partials.delete-modal')
-    @include('admin.destination.partials.edit-modal')
+    @include('admin.destination.partials.view-modal')
     @include('admin.destination.partials.create-modal')
+    @include('admin.destination.partials.edit-modal')
+    @include('admin.destination.partials.delete-modal')
 </div>

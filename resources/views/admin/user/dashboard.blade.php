@@ -36,39 +36,36 @@
             </div>
         </x-slot>
 
-        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <div class="max-w-full">
-                @forelse ($users as $user)
-                    <x-row-card>
-                        <div class="w-full flex flex-row items-center gap-4">
-                            <div>
-                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                            </div>
-                            <div class="w-full">
-                                <p class="font-semibold">{{ $user->name }}</p>
-                                <p class="text-sm text-gray-600">{{ $user->email }}</p>
-                            </div>
-                            <div class="flex items-end gap-1">
-                                <x-primary-button
-                                    x-on:click="openViewModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ addslashes($user->email) }}', '{{ addslashes($user->role) }}')">
-                                    View
-                                </x-primary-button>
-                                <x-edit-button
-                                    x-on:click="openEditModal({ id: {{ $user->id }}, name: '{{ addslashes($user->name) }}', email: '{{ addslashes($user->email) }}', role: '{{ addslashes($user->role) }}' })">
-                                    Edit
-                                </x-edit-button>
-                                <x-delete-button
-                                    x-on:click="openDeleteModal({{ $user->id }}, '{{ addslashes($user->name) }}')">
-                                    Delete
-                                </x-delete-button>
-                            </div>
+        <x-table-container>
+            @forelse ($users as $user)
+                <x-row-card>
+                    <div class="w-full flex flex-row items-center gap-4">
+                        <div class="bg-indigo-100 p-2 rounded-full shadow-md">
+                            <x-lucide-user-round class="h-8 w-auto" />
                         </div>
-                    </x-row-card>
-                @empty
-                    <p>There is no user.</p>
-                @endforelse
-            </div>
-        </div>
+                        <div class="w-full">
+                            <p class="font-semibold">{{ $user->name }}</p>
+                            <p class="text-sm text-gray-600">{{ $user->email }}</p>
+                        </div>
+                        <div class="flex items-end gap-1">
+                            <x-primary-button
+                                x-on:click="openViewModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ addslashes($user->email) }}', '{{ addslashes($user->role) }}')">
+                                View
+                            </x-primary-button>
+                            <x-edit-button
+                                x-on:click="openEditModal({ id: {{ $user->id }}, name: '{{ addslashes($user->name) }}', email: '{{ addslashes($user->email) }}', role: '{{ addslashes($user->role) }}' })">
+                                Edit
+                            </x-edit-button>
+                            <x-delete-button x-on:click="openDeleteModal({{ $user->id }}, '{{ addslashes($user->name) }}')">
+                                Delete
+                            </x-delete-button>
+                        </div>
+                    </div>
+                </x-row-card>
+            @empty
+                <p>There is no user.</p>
+            @endforelse
+        </x-table-container>
     </x-app-layout>
 
     @include('admin.user.partials.create-modal')

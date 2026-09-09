@@ -1,12 +1,12 @@
 <x-head>
-    <body class="font-sans antialiased overflow-hidden">
-        <!-- Fixed Viewport Shell: locks the screen from scrolling as a whole -->
-        <div x-data="{ open: false }" class="h-screen w-screen flex bg-gray-100 overflow-hidden">
 
-            <!-- Sidebar Navigation -->
+    <body class="font-sans antialiased overflow-hidden">
+        <div x-data="{ open: false }" class="h-screen w-screen flex overflow-hidden">
+
+            <!-- Sidebar -->
             @include('layouts.navigation')
 
-            <!-- Right Content Panel: handles main page vertical scrolling independently -->
+            <!-- Right Content Panel -->
             <div class="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
 
                 <!-- Mobile Header Bar -->
@@ -29,15 +29,22 @@
 
                 <!-- Page Heading -->
                 @if (isset($header))
-                    <header class="bg-white shadow shrink-0">
+                    <header class="block md:hidden bg-white shadow shrink-0">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                             {{ $header }}
                         </div>
                     </header>
                 @endif
 
-                <main class="flex-1 p-6">
-                    {{ $slot }}
+                <main class="flex-1 p-6 bg-ocean-2/20">
+                    @if (isset($header))
+                        <header class="bg-white shadow shrink-0 rounded-xl">
+                            <div class="hidden md:block max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                                {{ $header }}
+                            </div>
+                            {{ $slot }}
+                        </header>
+                    @endif
                 </main>
 
             </div>

@@ -5,18 +5,26 @@
         </h2>
     </x-slot>
 
-    <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-        <div class="max-w-full">
-            @forelse ($bookings as $booking)
+    <x-table-container>
+        @forelse ($bookings as $booking)
+            @if (!($booking->status == "payment"))
                 <x-row-card>
                     <div class="w-full flex flex-row items-center gap-4">
                         <div class="flex w-full gap-4">
-                            <p class="font-semibold text-gray-900">{{ $booking->name }}</p>
-                            <p class="font-semibold text-gray-600">{{ $booking->user_name }}</p>
-                            <p class="font-semibold text-gray-600">{{ $booking->status }}</p>
+                            <div class="flex flex-col">
+                                <p class="text-lg font-semibold text-black">{{ $booking->user->name }}</p>
+                                <p class="font-semibold text-gray-600">Nama Booking : {{ $booking->name }}</p>
+                                @if ($booking->bundle)
+                                    <p class="font-semibold text-gray-600"> Paket yang di pilih : {{ $booking->bundle->name }}</p>
+                                @endif
+                                <div class="flex flex-row"> 
+                                    <p class="font-semibold text-gray-600">Status : {{ $booking->status }}</p>
+                                </div>
+                            </div>
                         </div>
                         <div>
-                            <form method="POST" action="{{ route('admin.booking.status', $booking->id) }}" class="flex gap-2 md:flex-row flex-col">
+                            <form method="POST" action="{{ route('admin.booking.status', $booking->id) }}"
+                                class="flex gap-2 md:flex-row flex-col">
                                 @csrf
                                 @method('PATCH')
                                 <x-edit-button type="submit" name="status" value="accepted">
@@ -29,9 +37,9 @@
                         </div>
                     </div>
                 </x-row-card>
-            @empty
-                <p>No bookings found.</p>
-            @endforelse
-        </div>
-    </div>
+            @endif
+        @empty
+            <p>No bookings found.</p>
+        @endforelse
+    </x-table-container>
 </x-app-layout>
