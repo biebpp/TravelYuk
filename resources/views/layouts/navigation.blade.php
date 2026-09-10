@@ -46,7 +46,12 @@
     </nav>
 
     <!-- Profile Footer -->
-    <div class="px-2 py-4 shadow-t-md">
+    <div class="px-2 py-4 shadow-t-md
+    ">
+        <x-responsive-nav-link :href="route('index')" class="rounded-md">
+            {{ __('Home') }}
+        </x-responsive-nav-link>
+
         <x-responsive-nav-link :href="route('profile.edit')" class="rounded-md">
             {{ __('Profile') }}
         </x-responsive-nav-link>

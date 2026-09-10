@@ -47,7 +47,7 @@ class BookingController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return back()->with('message', 'Booking created successfully');
+        return redirect()->route('client.dashboard')->with('message', 'Booking created successfully!');
     }
 
     public function updateStatus(Request $request, Booking $booking)

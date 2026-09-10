@@ -23,6 +23,7 @@
                             </div>
                         </div>
                         <div>
+                            @if ($booking->status == "pending")
                             <form method="POST" action="{{ route('admin.booking.status', $booking->id) }}"
                                 class="flex gap-2 md:flex-row flex-col">
                                 @csrf
@@ -34,6 +35,7 @@
                                     {{ __('Decline') }}
                                 </x-delete-button>
                             </form>
+                            @endif
                         </div>
                     </div>
                 </x-row-card>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\TourBundleController;
 use App\Http\Controllers\Client\BookingController as ClientBookingController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\GeocodingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('index');
 Route::get('/packages', [ClientBookingController::class, 'packagesIndex'])->name('packages');
+Route::get('/packages/{bundle}', [PaymentController::class, 'index'])->middleware(['auth'])->name('payment');
 
 Route::post('/get-coordinates', [GeocodingController::class, 'getCoordinates']);
 
