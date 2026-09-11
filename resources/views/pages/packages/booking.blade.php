@@ -20,15 +20,8 @@
                     <div class="bg-ocean-2 p-4 rounded-md">
                         <form method="POST" action="{{ route('client.booking.store') }}" class="">
                             @csrf
+                            <input type="hidden" name="bundle_name" value="{{ $bundle->name }}">
                             <input type="hidden" name="bundle_id" value="{{ $bundle->id }}">
-                            <div class="mb-2">
-                                <x-input-label for="create_name" :value="__('Name')" />
-                                <x-text-input id="create_name" name="name" type="text" class="mt-1 block w-full"
-                                    :value="old('name')" required />
-                                <div class="validation-error-container">
-                                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                                </div>
-                            </div>
                             <div class="flex w-full justify-end items-end">
                                 <x-primary-button type="submit">
                                     {{ __('Confirm Booking') }}

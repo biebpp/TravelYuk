@@ -12,8 +12,7 @@
                     <div class="w-full flex flex-row items-center gap-4">
                         <div class="flex w-full gap-4">
                             <div class="flex flex-col">
-                                <p class="text-lg font-semibold text-black">{{ $booking->user->name }}</p>
-                                <p class="font-semibold text-gray-600">Nama Booking : {{ $booking->name }}</p>
+                                <p class="text-lg font-semibold text-black">{{ $booking->name }}</p>
                                 @if ($booking->bundle)
                                     <p class="font-semibold text-gray-600"> Paket yang di pilih : {{ $booking->bundle->name }}</p>
                                 @endif

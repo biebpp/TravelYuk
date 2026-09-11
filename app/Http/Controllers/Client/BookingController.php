@@ -11,14 +11,15 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function callDatabase() {
+    public function callDatabase()
+    {
         $bundles = TourBundle::with('destinations')->get();
-        $bookings = Booking::with('bundle')
+        $bookings = Booking::with('bundle.destinations')
             ->where('user_id', Auth::id())
             ->get();
         return [$bundles, $bookings];
     }
-    
+
 
     public function index()
     {
@@ -35,13 +36,12 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
             'bundle_id' => ['required', 'integer', 'max:255'],
             'status' => ['nullable', 'string', 'in:payment,pending,accepted,declined'],
         ]);
 
         Booking::create([
-            'name' => $request->name,
+            'name' => Auth::user()->name . ' is Booking For ' . $request->bundle_name,
             'bundle_id' => $request->bundle_id,
             'status' => 'payment',
             'user_id' => Auth::id(),

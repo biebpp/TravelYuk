@@ -2,7 +2,7 @@
     <a href="/">
         <img src="{{ asset('images/WLogo_nocut.svg') }}" alt="Logo" class="h-12 w-auto">
     </a>
-    <div class="w-full flex gap-4 justify-center">
+    <div class="w-full flex gap-8 justify-center">
         <a href="/" class="cursor-pointer">Home</a>
         <a href="/packages" class="cursor-pointer">Packages</a>
         <a class="cursor-pointer">Tours</a>
