@@ -13,20 +13,23 @@
             <div class="flex flex-col w-screen py-4 justify-center items-center">
                 <div class="w-fit flex flex-row justify-center ephesis-regular">
                     <span class="w-full flex justify-start items-start text-8xl">
-                        Booking
+                        Payment
                     </span>
                 </div>
                 <div class="w-full px-96 mt-12 text-black">
                     <div class="bg-ocean-2 p-4 rounded-md">
-
-                    ini booking
-                        <form method="POST" action="{{ route('client.booking.store') }}" class="">
+                        <form method="POST" action="{{ route('client.booking.status', $booking) }}" class="">
                             @csrf
-                            <input type="hidden" name="bundle_name" value="{{ $bundle->name }}">
-                            <input type="hidden" name="bundle_id" value="{{ $bundle->id }}">
-                            <div class="flex w-full justify-end items-end">
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="pending">
+                            <div class="flex w-full justify-end items-end gap-1">
+                                <a href="{{ route('client.booking') }}">
+                                    <x-primary-button type="button">
+                                        {{ __('Pay Later') }}
+                                    </x-primary-button>
+                                </a>
                                 <x-edit-button type="submit">
-                                    {{ __('Confirm Booking') }}
+                                    {{ __('Confirm Payment') }}
                                 </x-edit-button>
                             </div>
                         </form>

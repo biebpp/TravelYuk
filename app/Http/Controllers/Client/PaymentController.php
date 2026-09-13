@@ -10,8 +10,13 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function index(TourBundle $bundle)
+    public function index(TourBundle $bundle, Booking $booking)
     {
-        return view("pages.packages.booking", compact('bundle'));
+        return view("pages.packages.booking", compact('bundle', 'booking'));
+    }
+
+    public function payment(TourBundle $bundle, Booking $booking)
+    {
+        return view("pages.packages.payment", compact('bundle', 'booking'));
     }
 }

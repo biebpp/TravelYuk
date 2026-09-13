@@ -40,14 +40,14 @@ class BookingController extends Controller
             'status' => ['nullable', 'string', 'in:payment,pending,accepted,declined'],
         ]);
 
-        Booking::create([
+        $booking = Booking::create([
             'name' => Auth::user()->name . ' is Booking For ' . $request->bundle_name,
             'bundle_id' => $request->bundle_id,
             'status' => 'payment',
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('client.dashboard')->with('message', 'Booking created successfully!');
+        return redirect()->route('payment.packages', ['booking' => $booking->id])->with('message', 'Booking created successfully!');
     }
 
     public function updateStatus(Request $request, Booking $booking)
@@ -60,7 +60,7 @@ class BookingController extends Controller
             'status' => $request->status,
         ]);
 
-        return back()->with('message', "Booking status updated to {$request->status}.");
+        return redirect()->route('client.booking')->with('message', "Booking status updated to {$request->status}.");
     }
 
     public function destroy(Booking $booking, $id)

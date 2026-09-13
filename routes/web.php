@@ -17,6 +17,7 @@ Route::get('/', function () {
 })->name('index');
 Route::get('/packages', [ClientBookingController::class, 'packagesIndex'])->name('packages');
 Route::get('/packages/{bundle}', [PaymentController::class, 'index'])->middleware(['auth'])->name('payment');
+Route::get('/packages/{booking}/payment', [PaymentController::class, 'payment'])->middleware(['auth'])->name('payment.packages');
 
 Route::post('/get-coordinates', [GeocodingController::class, 'getCoordinates']);
 
