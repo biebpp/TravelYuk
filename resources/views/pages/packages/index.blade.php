@@ -48,24 +48,25 @@
                         <div class="grid grid-cols-4 gap-6">
 
                             @foreach ($bundles as $bundle)
-                                <div class="bg-white pb-4 w-min h-fit">
-                                    <img class="mb-2 w-64 max-w-none" src="https://placehold.co/250x250" />
-                                    <div
-                                        class="w-full flex flex-col px-4 text-xl justify-center items-center font-semibold gap-2">
-                                        <span class="">{{ $bundle->name }}</span>
-                                        <x-primary-button class="w-fit" x-on:click="openViewModal({{ json_encode($bundle) }})">
-                                            {{ __('View Detail') }}
-                                        </x-primary-button>
+                                @if ($bundle->slot > 0)
+                                    <div class="bg-white pb-4 w-min h-fit">
+                                        <img class="mb-2 w-64 max-w-none" src="https://placehold.co/250x250" />
+                                        <div
+                                            class="w-full flex flex-col px-4 text-xl justify-center items-center font-semibold gap-2">
+                                            <span class="">{{ $bundle->name }}</span>
+                                            <x-primary-button class="w-fit"
+                                                x-on:click="openViewModal({{ json_encode($bundle) }})">
+                                                {{ __('View Detail') }}
+                                            </x-primary-button>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endforeach
 
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="h-screen"></div>
         </div>
         @include('pages.packages.partials.view-modal')
     </div>

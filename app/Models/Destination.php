@@ -13,7 +13,7 @@ class Destination extends Model
     protected $table = 'destinations';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'name', 'description', 'address'
+        'name', 'description', 'address', 'slot'
     ];
 
     public function tourBundles(): BelongsToMany

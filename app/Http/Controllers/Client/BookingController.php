@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\TourBundle;
+use App\Models\Transaction;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -36,7 +37,7 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'bundle_id' => ['required', 'integer', 'max:255'],
+            'bundle_id' => ['required', 'integer', 'exists:tour_bundles,id'],
             'status' => ['nullable', 'string', 'in:payment,pending,accepted,declined'],
         ]);
 
@@ -50,15 +51,35 @@ class BookingController extends Controller
         return redirect()->route('payment.packages', ['booking' => $booking->id])->with('message', 'Booking created successfully!');
     }
 
-    public function updateStatus(Request $request, Booking $booking)
+    public function updateStatus(Request $request, Booking $booking, TourBundle $bundle)
     {
         $request->validate([
             'status' => 'required|in:payment,pending',
+            'bundle_id' => 'required|exists:tour_bundles,id',
+            'transaction_id' => 'required',
+            'payment_method' => 'required',
+            'price' => 'required',
         ]);
+
+        Transaction::create([
+            'id' => $request->transaction_id,
+            'user_id' => Auth::id(),
+            'payment' => $request->payment_method,
+            'nominal' => $request->price,
+            'transaction_date' => date('Ymd'),
+            'status' => 'success',
+        ]);
+
+        $bundle = TourBundle::findOrFail($request->bundle_id);
+        if ($booking->status !== 'pending' && $request->status === 'pending') {
+            $bundle->decrement('slot');
+        }
 
         $booking->update([
             'status' => $request->status,
+            'transaction_id' => $request->transaction_id,
         ]);
+
 
         return redirect()->route('client.booking')->with('message', "Booking status updated to {$request->status}.");
     }
