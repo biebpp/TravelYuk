@@ -11,6 +11,7 @@ class TourBundle extends Model
 {
     use HasFactory;
 
+    protected $table = 'tour_bundles';
     protected $fillable = [
         'admin_id',
         'transportation_id',

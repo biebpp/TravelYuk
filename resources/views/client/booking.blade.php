@@ -8,6 +8,7 @@
         this.selectedUser = { 
             id: booking.id,
             name: booking.name,
+            bundle_id: booking.bundle_id,
             price: bundle.price || '0',
             slot: bundle.slot ?? 'Unlimited',
             bundle_name: bundle.name || '',

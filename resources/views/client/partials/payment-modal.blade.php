@@ -11,7 +11,8 @@
             <div>
                 <x-input-label value="" />
                 <div class="mb-4">
-                    <span class="text-3xl font-semibold text-gray-700 block" x-text="'Bundle : ' + selectedUser.bundle_name"></span>
+                    <span class="text-3xl font-semibold text-gray-700 block"
+                        x-text="'Bundle : ' + selectedUser.bundle_name"></span>
                 </div>
 
                 <div>
@@ -22,7 +23,8 @@
 
                 <div>
                     <span class="font-semibold text-gray-700 block">{{ __('Transaction ID:') }}</span>
-                    <p class="text-gray-900 font-medium whitespace-pre-line mt-1 bg-gray-50 p-3 rounded-md border">TR-{{ time() }}
+                    <p class="text-gray-900 font-medium whitespace-pre-line mt-1 bg-gray-50 p-3 rounded-md border">
+                        TR-{{ time() }}
                     </p>
                 </div>
 
@@ -47,10 +49,21 @@
                     </div>
                 </div>
 
+                <div>
+                    <span class="font-semibold text-gray-700 block">{{ __('Payment Method:') }}</span>
+                    <select name="payment_method">
+                        <option>BRI</option>
+                        <option>BCA</option>
+                    </select>
+                </div>
+
             </div>
         </div>
 
         <input type="hidden" name="status" value="pending">
+        <input type="hidden" name="bundle_id" :value="selectedUser.bundle_id">
+        <input type="hidden" name="transaction_id" value="TR-{{ time() }}">
+        <input type="hidden" name="price" :value="selectedUser.price">
 
         <div class="mt-6 flex justify-end gap-3">
             <button type="button" x-on:click="$dispatch('close')"

@@ -33,6 +33,10 @@
                 class="rounded-md">
                 {{ __('Tour Bundles') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.transactions')" :active="request()->routeIs('admin.transactions')"
+                class="rounded-md">
+                {{ __('Transaction Report') }}
+            </x-responsive-nav-link>
         @else
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('client.dashboard')"
                 class="rounded-md">

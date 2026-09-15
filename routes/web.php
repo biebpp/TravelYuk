@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\BundleController;
 use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\TourBundleController;
+use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Client\BookingController as ClientBookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\PaymentController;
@@ -27,12 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 Route::middleware(['auth'])->get('/dashboard', function () {
     return auth()->user()->role === 'admin'
         ? redirect()->route('admin.users.dashboard')
         : redirect()->route('client.dashboard');
 })->name('dashboard');
+
 Route::middleware(['auth'])->get('/booking', function () {
     return auth()->user()->role === 'admin'
         ? redirect()->route('admin.booking')
@@ -57,6 +57,8 @@ Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     Route::post('/bundles', [TourBundleController::class, 'store'])->name('admin.bundles.store');
     Route::patch('/bundles/{id}', [TourBundleController::class, 'update'])->name('admin.bundles.update');
     Route::delete('/bundles/{id}', [TourBundleController::class, 'destroy'])->name('admin.bundles.destroy');
+
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('admin.transactions');
 });
 
 Route::middleware(['role:client'])->prefix('client')->group(function () {
