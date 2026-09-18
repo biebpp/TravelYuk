@@ -14,9 +14,7 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // DB::table("users")->delete(
-        //     DB::table("users")->where('name', 'admin')->pluck('id')
-        // );
+        DB::table('users')->where('email', 'admin@admin.com')->delete();
 
         DB::table("users")->insert([
             'name' => 'admin',

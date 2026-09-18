@@ -13,20 +13,22 @@ class EnsureUserIsAdmin
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string ...$role): Response
     {
         $user = $request->user();
 
-        if(!$user) {
+        if (!$user) {
             return redirect()->route('login');
         }
 
-        if ($user->role !== $role) {
-            return $request->user()->role === 'admin'
-                ? redirect()->route('admin.dashboard')
-                : redirect()->route('client.dashboard');
+        if (in_array($user->role, $role, true)) {
+            return $next($request);
         }
 
-        return $next($request);
+        return match ($user->role) {
+            'superadmin' => redirect()->route('admin.users.dashboard'),
+            'admin' => redirect()->route('admin.booking'),
+            default => redirect()->route('client.dashboard'),
+        };
     }
 }

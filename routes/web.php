@@ -10,7 +10,6 @@ use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\GeocodingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,23 +27,27 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->get('/dashboard', function () {
-    return auth()->user()->role === 'admin'
-        ? redirect()->route('admin.users.dashboard')
-        : redirect()->route('client.dashboard');
+    return match (auth()->user()->role) {
+        'superadmin' => redirect()->route('admin.users.dashboard'),
+        'admin' => redirect()->route('admin.booking'),
+        default => redirect()->route('client.dashboard'),
+    };
 })->name('dashboard');
 
 Route::middleware(['auth'])->get('/booking', function () {
-    return auth()->user()->role === 'admin'
+    return in_array(auth()->user()->role, ['admin', 'superadmin'], true)
         ? redirect()->route('admin.booking')
         : redirect()->route('client.booking');
 })->name('booking');
 
-Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+Route::middleware(['role:superadmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('admin.users.dashboard');
     Route::post('/dashboard', [UserController::class, 'store'])->name('admin.users.store');
     Route::patch('/dashboard/{id}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/dashboard/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+});
 
+Route::middleware(['role:admin,superadmin'])->prefix('admin')->group(function () {
     Route::get('/booking', [AdminBookingController::class, 'index'])->name('admin.booking');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'updateStatus'])->name('admin.booking.status');
 

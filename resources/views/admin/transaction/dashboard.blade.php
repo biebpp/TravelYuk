@@ -40,13 +40,17 @@
 
                     <div class="w-full">
                         <p class="font-semibold text-lg text-gray-900">{{ $transaction->id }}</p>
-                        <div class="flex flex-col text-sm text-gray-600 mt-1">
-                            <span><strong>Booking:</strong> {{ $transaction->bundle_name }}</span>
-                            <span><strong>Client:</strong> {{ $transaction->user->name }}</span>
-                            <span><strong>Payment Method:</strong> {{ $transaction->payment }}</span>
-                            <span><strong>Price:</strong> Rp. {{ number_format($transaction->nominal, 2) }}</span>
-                            <span><strong>Status:</strong> {{ $transaction->status }}</span>
-                            <span><strong>Date:</strong> {{ $transaction->updated_at }}</span>
+                        <div class="flex flex-col md:flex-row text-md text-gray-600 mt-1">
+                            <div class="w-full flex flex-col">
+                                <span><strong>Booking:</strong> {{ $transaction->bundle_name }}</span>
+                                <span><strong>Client:</strong> {{ $transaction->user->name }}</span>
+                                <span><strong>Payment Method:</strong> {{ $transaction->payment }}</span>
+                            </div>
+                            <div class="w-full flex flex-col">
+                                <span><strong>Price:</strong> Rp. {{ number_format($transaction->nominal, 2) }}</span>
+                                <span><strong>Status:</strong> {{ $transaction->status }}</span>
+                                <span><strong>Date:</strong> {{ $transaction->updated_at }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
