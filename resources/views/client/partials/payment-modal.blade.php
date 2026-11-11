@@ -22,13 +22,6 @@
                 </div>
 
                 <div>
-                    <span class="font-semibold text-gray-700 block">{{ __('Transaction ID:') }}</span>
-                    <p class="text-gray-900 font-medium whitespace-pre-line mt-1 bg-gray-50 p-3 rounded-md border">
-                        TR-{{ time() }}
-                    </p>
-                </div>
-
-                <div>
                     <span class="font-semibold text-gray-700 block">{{ __('Description:') }}</span>
                     <p class="text-gray-900 whitespace-pre-line mt-1 bg-gray-50 p-3 rounded-md border"
                         x-text="selectedUser.description"></p>
@@ -55,15 +48,11 @@
                         <option>BRI</option>
                         <option>BCA</option>
                     </select>
+                    <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
                 </div>
 
             </div>
         </div>
-
-        <input type="hidden" name="status" value="pending">
-        <input type="hidden" name="bundle_id" :value="selectedUser.bundle_id">
-        <input type="hidden" name="transaction_id" value="TR-{{ time() }}">
-        <input type="hidden" name="price" :value="selectedUser.price">
 
         <div class="mt-6 flex justify-end gap-3">
             <button type="button" x-on:click="$dispatch('close')"

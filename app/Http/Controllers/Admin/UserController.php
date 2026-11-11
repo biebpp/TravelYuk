@@ -13,12 +13,9 @@ class UserController extends Controller
 {
     public function index()
     {
-        // $users = User::where('role', 'client')->get();    
-        $users = User::all();
+        $users = User::query()->latest()->paginate(20);
 
-        return view("admin.user.dashboard", [
-            "users" => $users,
-        ]);
+        return view('admin.user.dashboard', compact('users'));
     }
 
     public function store(Request $request)
@@ -40,9 +37,8 @@ class UserController extends Controller
         return back()->with('message', 'User created successfully');
     }
 
-    public function update(Request $request, User $users, $id)
+    public function update(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
@@ -58,9 +54,16 @@ class UserController extends Controller
         return back()->with('message', 'User updated successfully');
     }
 
-    public function destroy(User $users, $id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
+        if ($user->is(auth()->user())) {
+            return back()->withErrors(['user' => 'Anda tidak dapat menghapus akun yang sedang digunakan.']);
+        }
+
+        if ($user->bookings()->exists()) {
+            return back()->withErrors(['user' => 'Pengguna memiliki riwayat booking dan tidak dapat dihapus.']);
+        }
+
         $user->delete();
 
         return back()->with('message', 'User deleted successfully');

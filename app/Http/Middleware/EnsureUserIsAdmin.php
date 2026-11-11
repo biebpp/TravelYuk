@@ -17,7 +17,7 @@ class EnsureUserIsAdmin
     {
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
 
@@ -27,7 +27,7 @@ class EnsureUserIsAdmin
 
         return match ($user->role) {
             'superadmin' => redirect()->route('admin.users.dashboard'),
-            'admin' => redirect()->route('admin.booking'),
+            'admin' => redirect()->route('admin.dashboard'),
             default => redirect()->route('client.dashboard'),
         };
     }

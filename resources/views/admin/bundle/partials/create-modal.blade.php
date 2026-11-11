@@ -86,6 +86,22 @@
                 </div>
             </div>
 
+            <fieldset class="space-y-2">
+                <legend class="font-medium">{{ __('Tickets included in this package') }}</legend>
+                @forelse ($tickets as $ticket)
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" name="ticket_ids[]" value="{{ $ticket->id }}" x-model="selectedBundle.ticket_ids">
+                        <span>{{ $ticket->name }} — {{ $ticket->destination->name }} (Rp {{ number_format($ticket->price, 0, ',', '.') }})</span>
+                    </label>
+                @empty
+                    <p class="text-sm text-gray-500">{{ __('Add tickets first, then select them for this package.') }}</p>
+                @endforelse
+                <div class="validation-error-container">
+                    <x-input-error :messages="$errors->get('ticket_ids')" class="mt-2" />
+                    <x-input-error :messages="$errors->get('ticket_ids.*')" class="mt-2" />
+                </div>
+            </fieldset>
+
             <!-- Description -->
             <div>
                 <x-input-label for="create_description" :value="__('Description')" />

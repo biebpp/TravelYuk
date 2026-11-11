@@ -17,12 +17,18 @@
     <!-- Nav Links -->
     <nav class="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-1">
         @if (auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin')
+            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')"
+                class="rounded-md">
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
             @if (auth()->user()->role === 'superadmin')
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('admin.users.dashboard')"
+                <x-responsive-nav-link :href="route('admin.users.dashboard')" :active="request()->routeIs('admin.users.*')"
                     class="rounded-md">
-                    {{ __('User Dashboard') }}
+                    {{ __('Users') }}
                 </x-responsive-nav-link>
             @endif
+
             <x-responsive-nav-link :href="route('booking')" :active="request()->routeIs('admin.booking')"
                 class="rounded-md">
                 {{ __('Booking') }}
@@ -30,6 +36,10 @@
             <x-responsive-nav-link :href="route('admin.destinations')" :active="request()->routeIs('admin.destinations')"
                 class="rounded-md">
                 {{ __('Destination') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.tickets')" :active="request()->routeIs('admin.tickets*')"
+                class="rounded-md">
+                {{ __('Tickets') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.bundles')" :active="request()->routeIs('admin.bundles')"
                 class="rounded-md">

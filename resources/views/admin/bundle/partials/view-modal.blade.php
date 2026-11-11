@@ -40,6 +40,16 @@
                 <span class="font-semibold text-gray-700 block">{{ __('Description:') }}</span>
                 <p class="text-gray-900 whitespace-pre-line mt-1 bg-gray-50 p-3 rounded-md border" x-text="selectedBundle.description"></p>
             </div>
+
+            <div>
+                <span class="font-semibold text-gray-700 block mb-1">{{ __('Included Tickets:') }}</span>
+                <div class="space-y-1">
+                    <template x-for="ticket in (selectedBundle.tickets || [])" :key="ticket.id">
+                        <p class="text-gray-700" x-text="`${ticket.name} — ${ticket.destination.name} (Rp ${Number(ticket.price).toLocaleString('id-ID')})`"></p>
+                    </template>
+                    <p x-show="!selectedBundle.tickets || !selectedBundle.tickets.length" class="text-gray-500">{{ __('No tickets included.') }}</p>
+                </div>
+            </div>
         </div>
 
         <div class="mt-6 flex justify-end">
