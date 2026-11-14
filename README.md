@@ -44,6 +44,12 @@ php artisan storage:link
 
 Upload destinasi dan paket disimpan pada disk `public`; `storage:link` diperlukan agar gambar yang diunggah dapat ditampilkan.
 
+### Menyediakan akun admin
+
+Sebelum menjalankan `php artisan db:seed`, isi `TRAVELYUK_SEED_ADMIN_EMAIL`, `TRAVELYUK_SEED_ADMIN_PASSWORD`, `TRAVELYUK_SEED_SUPERADMIN_EMAIL`, dan `TRAVELYUK_SEED_SUPERADMIN_PASSWORD` di `.env` lokal. Gunakan alamat email berbeda dan password kuat; jangan commit atau membagikan `.env`.
+
+Di luar production, seeder melewati pembuatan akun jika semua nilai kosong. Di production, semua nilai wajib diisi; konfigurasi parsial, email tidak valid, atau email yang sama akan menghentikan proses sebelum akun dibuat. Seeder tidak mereset password akun yang sudah ada.
+
 ### Menjalankan aplikasi
 
 ```powershell
@@ -55,8 +61,10 @@ Buka `http://127.0.0.1:8000`. Untuk perubahan frontend selama pengembangan, jala
 ## Pengujian
 
 ```powershell
-php artisan test
+composer test
 ```
+
+Skrip Composer membersihkan config cache sebelum menjalankan Laravel Test.
 
 ## Alur booking dan pembayaran
 

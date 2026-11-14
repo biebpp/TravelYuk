@@ -138,6 +138,74 @@ class BookingFlowTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_admin_can_view_and_update_a_booking_status(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $bundle = $this->createBundle($admin, 1);
+        $booking = Booking::create([
+            'user_id' => $admin->id,
+            'bundle_id' => $bundle->id,
+            'name' => 'Admin booking',
+            'status' => 'pending',
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get(route('admin.booking'))
+            ->assertOk()
+            ->assertSee(route('admin.booking.status', $booking), false);
+
+        $html = $response->getContent();
+        $this->assertSame(1, substr_count($html, '<body'));
+        $this->assertGreaterThan(strrpos($html, '</header>'), strpos($html, 'Admin booking'));
+
+        $this->patch(route('admin.booking.status', $booking), [
+            'status' => 'accepted',
+            'payment_status' => 'paid',
+        ])->assertRedirect(route('admin.booking'));
+
+        $this->assertDatabaseHas('bookings', [
+            'id' => $booking->id,
+            'status' => 'accepted',
+            'payment_status' => 'paid',
+        ]);
+    }
+
+    public function test_admin_cannot_mark_a_declined_booking_as_paid(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $bundle = $this->createBundle($admin, 0);
+        $booking = Booking::create([
+            'user_id' => $admin->id,
+            'bundle_id' => $bundle->id,
+            'name' => 'Reserved booking',
+            'status' => 'pending',
+            'payment_status' => 'unpaid',
+            'participants' => 1,
+            'inventory_reserved' => true,
+            'bundle_quota_reserved' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->from(route('admin.booking'))
+            ->patch(route('admin.booking.status', $booking), [
+                'status' => 'declined',
+                'payment_status' => 'paid',
+            ])
+            ->assertRedirect(route('admin.booking'))
+            ->assertSessionHasErrors('payment_status');
+
+        $this->assertDatabaseHas('bookings', [
+            'id' => $booking->id,
+            'status' => 'pending',
+            'payment_status' => 'unpaid',
+            'inventory_reserved' => true,
+        ]);
+        $this->assertDatabaseHas('tour_bundles', [
+            'id' => $bundle->id,
+            'slot' => 0,
+        ]);
+    }
+
     private function createBundle(User $admin, ?int $slot): TourBundle
     {
         return TourBundle::create([

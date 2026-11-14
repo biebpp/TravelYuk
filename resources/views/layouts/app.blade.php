@@ -1,6 +1,4 @@
-<x-head>
-
-    <body class="font-sans antialiased overflow-hidden">
+<x-head class="overflow-hidden">
         <div x-data="{ open: false }" class="h-screen w-screen flex overflow-hidden">
 
             <!-- Sidebar -->
@@ -38,16 +36,19 @@
 
                 <main class="flex-1 p-6 bg-ocean-2/20">
                     @if (isset($header))
-                        <header class="bg-white shadow shrink-0 rounded-xl">
-                            <div class="hidden md:block max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                                {{ $header }}
-                            </div>
+                        <div class="bg-white shadow shrink-0 rounded-xl">
+                            <header>
+                                <div class="hidden md:block max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                                    {{ $header }}
+                                </div>
+                            </header>
                             {{ $slot }}
-                        </header>
+                        </div>
+                    @else
+                        {{ $slot }}
                     @endif
                 </main>
 
             </div>
         </div>
-    </body>
 </x-head>

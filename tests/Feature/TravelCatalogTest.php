@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\Destination;
+use App\Models\Booking;
 use App\Models\Ticket;
 use App\Models\TourBundle;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TravelCatalogTest extends TestCase
@@ -55,6 +58,61 @@ class TravelCatalogTest extends TestCase
         $this->assertDatabaseMissing('tickets', ['id' => $ticket->id]);
     }
 
+    public function test_admin_can_create_update_and_delete_a_destination(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin);
+
+        $this->post(route('admin.destinations.store'), [
+            'name' => 'Bali',
+            'category' => 'beach',
+            'address' => 'Bali, Indonesia',
+            'description' => 'Island destination',
+            'is_featured' => false,
+        ])->assertRedirect();
+
+        $destination = Destination::where('name', 'Bali')->firstOrFail();
+
+        $this->patch(route('admin.destinations.update', $destination), [
+            'name' => 'Bali Barat',
+            'category' => 'nature',
+            'address' => 'West Bali, Indonesia',
+            'description' => 'Updated destination',
+            'is_featured' => true,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('destinations', [
+            'id' => $destination->id,
+            'name' => 'Bali Barat',
+            'category' => 'nature',
+            'is_featured' => true,
+        ]);
+
+        $this->delete(route('admin.destinations.destroy', $destination))
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('destinations', ['id' => $destination->id]);
+    }
+
+    public function test_admin_can_upload_a_destination_image(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->post(route('admin.destinations.store'), [
+                'name' => 'Bali',
+                'category' => 'beach',
+                'address' => 'Bali, Indonesia',
+                'image' => UploadedFile::fake()->create('bali.jpg', 10, 'image/jpeg'),
+            ])
+            ->assertRedirect();
+
+        $destination = Destination::firstOrFail();
+        $this->assertNotNull($destination->image_path);
+        Storage::disk('public')->assertExists($destination->image_path);
+    }
+
     public function test_admin_can_attach_destination_tickets_to_a_package(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
@@ -97,6 +155,83 @@ class TravelCatalogTest extends TestCase
             'ticket_ids' => [$unrelatedTicket->id],
         ])->assertSessionHasErrors('ticket_ids');
         $this->assertDatabaseCount('tour_bundles', 1);
+    }
+
+    public function test_admin_can_update_and_delete_an_unused_package(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $originalDestination = $this->createDestination('Bali');
+        $updatedDestination = $this->createDestination('Lombok');
+        $originalTicket = $this->createTicket($originalDestination);
+        $updatedTicket = $this->createTicket($updatedDestination);
+        $bundle = $this->createBundle($admin, 'Paket Bali', 500000, $originalDestination, $originalTicket);
+
+        $this->actingAs($admin)
+            ->patch(route('admin.bundles.update', $bundle), [
+                'name' => 'Paket Lombok',
+                'description' => 'Paket terbaru',
+                'price' => 650000,
+                'destination_ids' => [$updatedDestination->id],
+                'ticket_ids' => [$updatedTicket->id],
+                'duration_days' => 3,
+                'duration_nights' => 2,
+                'slot' => 10,
+                'departure_date' => now()->addWeek()->toDateString(),
+                'is_active' => true,
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('tour_bundles', [
+            'id' => $bundle->id,
+            'name' => 'Paket Lombok',
+            'price' => 650000,
+            'duration_days' => 3,
+            'duration_nights' => 2,
+        ]);
+        $this->assertDatabaseHas('bundle_pivots', [
+            'bundle_id' => $bundle->id,
+            'destination_id' => $updatedDestination->id,
+        ]);
+        $this->assertDatabaseHas('bundle_tickets', [
+            'bundle_id' => $bundle->id,
+            'ticket_id' => $updatedTicket->id,
+        ]);
+        $this->assertDatabaseMissing('bundle_pivots', [
+            'bundle_id' => $bundle->id,
+            'destination_id' => $originalDestination->id,
+        ]);
+        $this->assertDatabaseMissing('bundle_tickets', [
+            'bundle_id' => $bundle->id,
+            'ticket_id' => $originalTicket->id,
+        ]);
+
+        $this->delete(route('admin.bundles.destroy', $bundle))
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('tour_bundles', ['id' => $bundle->id]);
+        $this->assertDatabaseMissing('bundle_pivots', ['bundle_id' => $bundle->id]);
+        $this->assertDatabaseMissing('bundle_tickets', ['bundle_id' => $bundle->id]);
+    }
+
+    public function test_admin_cannot_delete_a_package_with_booking_history(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $client = User::factory()->create(['role' => 'client']);
+        $destination = $this->createDestination('Bali');
+        $bundle = $this->createBundle($admin, 'Paket booked', 500000, $destination);
+        $booking = Booking::create([
+            'user_id' => $client->id,
+            'bundle_id' => $bundle->id,
+            'name' => 'Existing booking',
+            'status' => 'pending',
+        ]);
+
+        $this->actingAs($admin)
+            ->delete(route('admin.bundles.destroy', $bundle))
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('tour_bundles', ['id' => $bundle->id]);
+        $this->assertDatabaseHas('bookings', ['id' => $booking->id]);
     }
 
     public function test_package_catalog_searches_filters_and_displays_included_tickets(): void

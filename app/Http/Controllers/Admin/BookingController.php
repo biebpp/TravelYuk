@@ -51,6 +51,12 @@ class BookingController extends Controller
         DB::transaction(function () use ($booking, $validated) {
             $booking = Booking::query()->lockForUpdate()->findOrFail($booking->id);
 
+            if ($validated['status'] === 'declined' && $validated['payment_status'] === 'paid') {
+                throw ValidationException::withMessages([
+                    'payment_status' => 'Booking yang ditolak tidak dapat ditandai lunas.',
+                ]);
+            }
+
             if (in_array($booking->status, ['declined', 'cancelled'], true)
                 && $validated['status'] !== $booking->status) {
                 throw ValidationException::withMessages([

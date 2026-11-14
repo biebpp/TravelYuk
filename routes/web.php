@@ -52,6 +52,7 @@ Route::middleware(['role:superadmin'])->prefix('admin')->group(function () {
 Route::middleware(['role:admin,superadmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/booking', [AdminBookingController::class, 'index'])->name('admin.booking');
+    Route::patch('/booking/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('admin.booking.status');
 
     Route::get('/destination', [DestinationController::class, 'index'])->name('admin.destinations');
     Route::post('/destination', [DestinationController::class, 'store'])->name('admin.destinations.store');
