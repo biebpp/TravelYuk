@@ -4,10 +4,10 @@
 <x-head>
 
     <body class="text-gray-900 antialiased">
-        <div class="fixed w-full h-full -z-50">
-            <img class="w-full opacity-50" src="{{ asset('images/3.png') }}" alt="Background Image">
+        <div class="auth-page-background">
+            <img src="{{ asset('images/3.png') }}" alt="Background Image">
         </div>
-        <div class="w-screen bg-ocean-1/40 h-screen flex flex-col justify-center items-center">
+        <div class="auth-page-content w-screen h-screen flex flex-col justify-center items-center">
             <div class="bg-ocean-2 p-4 rounded-lg max-w-4xl w-full shadow-xl">
                 <div class="flex flex-row items-stretch overflow-hidden rounded-lg h-auto min-h-[420px]">
                     <div class="hidden sm:block sm:w-1/2 md:w-96 relative overflow-hidden">
